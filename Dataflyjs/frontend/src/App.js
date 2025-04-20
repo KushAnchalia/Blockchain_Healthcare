@@ -4,8 +4,8 @@ import patientJson from './abi/PatientRecord.json';
 import doctorJson from './abi/DoctorAccess.json';
 
 
-const patientContractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"; // replace with deployed PatientRecord.sol
-const doctorContractAddress = "0xC469e7aE4aD962c30c7111dc580B4adbc7E914DD";  // replace with deployed DoctorAccess.sol
+const patientContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // replace with deployed PatientRecord.sol
+const doctorContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";  // replace with deployed DoctorAccess.sol
 
 function App() {
   const [mode, setMode] = useState(""); // "patient" or "doctor"
@@ -18,19 +18,25 @@ function App() {
   const [viewedData, setViewedData] = useState(null);
 
   const connectWallet = async () => {
+    console.log("Ethereum object:", window.ethereum);
+
     if (typeof window.ethereum !== "undefined") {
+      await window.ethereum.request({ method: "eth_requestAccounts" }); // 👈 this triggers MetaMask popup
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const address = await signer.getAddress();
       setAccount(address);
-
+  
       const patient = new ethers.Contract(patientContractAddress, patientJson.abi, signer);
-const doctor = new ethers.Contract(doctorContractAddress, doctorJson.abi, signer);
-
+      const doctor = new ethers.Contract(doctorContractAddress, doctorJson.abi, signer);
+  
       setContractPatient(patient);
       setContractDoctor(doctor);
+    } else {
+      alert("Please install MetaMask!");
     }
   };
+  
 
   const addRecord = async () => {
     try {

@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const patientContractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+  const patientContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const DoctorAccess = await hre.ethers.getContractFactory("DoctorAccess");
   const doctorAccess = await DoctorAccess.deploy(patientContractAddress);
